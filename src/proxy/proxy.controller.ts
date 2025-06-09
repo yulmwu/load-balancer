@@ -7,14 +7,6 @@ import { defaultConfig } from './config'
 export class ProxyController {
     constructor(private readonly proxyService: ProxyService) {}
 
-    @Get('/__health')
-    healthCheck(@Res() res: Response) {
-        res.json({
-            servers: this.proxyService.getHealthStatus(),
-            config: { ...defaultConfig },
-        })
-    }
-
     @All('*')
     forward(@Req() req: Request, @Res() res: Response) {
         this.proxyService.handle(req, res)

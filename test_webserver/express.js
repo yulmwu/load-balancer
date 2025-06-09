@@ -3,7 +3,12 @@ const app = express()
 const port = process.argv[2] || 3000
 
 app.get('/', (req, res) => {
-    res.send(`Response from backend server at port <h1>${port}</h1>`)
+    res.send(`Hello, World! on ${port} port`)
+})
+
+app.get('/:name', (req, res) => {
+    const name = req.params.name
+    res.send(`Hello, ${name}! on ${port} port`)
 })
 
 app.listen(port, () => {
