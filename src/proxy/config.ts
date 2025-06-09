@@ -7,6 +7,7 @@ export interface LBConfig {
     strategy: 'round-robin' | 'random'
     backendServers: BackendServer[]
     healthCheckIntervalMs?: number
+    healthCheckFailureThreshold?: number,
 }
 
 export const defaultConfig: LBConfig = {

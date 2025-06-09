@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import * as httpProxy from 'http-proxy'
 import { Request, Response } from 'express'
-import { HealthCheckService } from './health-check.service'
+import { HealthCheckService } from './health_check.service'
 import { defaultConfig } from './config'
 
 @Injectable()
