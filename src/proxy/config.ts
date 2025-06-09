@@ -8,6 +8,7 @@ export interface LBConfig {
     backendServers: BackendServer[]
     healthCheckIntervalMs?: number
     healthCheckFailureThreshold?: number,
+    logging?: boolean
 }
 
 export const defaultConfig: LBConfig = {
@@ -17,6 +18,7 @@ export const defaultConfig: LBConfig = {
         { url: 'http://localhost:3002', healthPath: '/' },
         { url: 'http://localhost:3003', healthPath: '/' },
     ],
-    healthCheckIntervalMs: 2000
+    healthCheckIntervalMs: 2000,
+    logging: true,
 }
 

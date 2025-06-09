@@ -52,11 +52,13 @@ export class HealthCheckService implements OnModuleInit {
                 if (currentStatus.failureCount >= this.healthCheckFailureThreshold) currentStatus.healthy = false
             }
 
-            const date = new Date().toISOString().replace('T', ' ').split('.')[0]
-            console.log(`\n[${date}] Health check status:`)
-            this.status.forEach((s) => {
-                console.log(`     => url: '${s.url}' healthy: ${s.healthy}, failureCount: ${s.failureCount}`)
-            })
+            if (defaultConfig.logging) {
+                const date = new Date().toISOString().replace('T', ' ').split('.')[0]
+                console.log(`\n[${date}] Health check status:`)
+                this.status.forEach((s) => {
+                    console.log(`     => url: '${s.url}' healthy: ${s.healthy}, failureCount: ${s.failureCount}`)
+                })
+            }
 
             await new Promise((res) => setTimeout(res, this.intervalMs))
         }
