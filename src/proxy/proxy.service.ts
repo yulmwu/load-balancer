@@ -7,24 +7,35 @@ import { defaultConfig } from './config'
 @Injectable()
 export class ProxyService {
     private proxy = httpProxy.createProxyServer()
+
     private rrCurrentIndex = 0
 
     constructor(private healthCheck: HealthCheckService) {}
 
-    handle(req: Request, res: Response) {
+    private getNextTarget(): string | null {
         const healthyServers = this.healthCheck.getHealthyServers()
-        if (healthyServers.length === 0) {
-            return res.status(503).send('No healthy backend servers')
-        }
+        if (healthyServers.length === 0) return null
 
-        let target: string
-        if (defaultConfig.strategy === 'random') {
-            const randIndex = Math.floor(Math.random() * healthyServers.length)
-            target = healthyServers[randIndex]
-        } else {
-            target = healthyServers[this.rrCurrentIndex % healthyServers.length]
-            this.rrCurrentIndex++
+        switch (defaultConfig.strategy) {
+            case 'random': {
+                const r = Math.floor(Math.random() * healthyServers.length)
+                return healthyServers[r]
+            }
+
+            case 'round-robin': {
+                const target = healthyServers[this.rrCurrentIndex % healthyServers.length]
+                this.rrCurrentIndex++
+                return target
+            }
+
+            default:
+                throw new Error(`Unknown load balancing strategy: ${defaultConfig.strategy}`)
         }
+    }
+
+    handle(req: Request, res: Response) {
+        const target = this.getNextTarget()
+        if (!target) return res.status(503).send('No healthy backend servers available')
 
         this.proxy.web(req, res, { target }, (err) => {
             res.status(502).send(`Bad Gateway: ${err.message}`)
