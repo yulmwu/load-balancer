@@ -1,9 +1,7 @@
 import { Module } from '@nestjs/common'
-import { LoadBalancerController } from './app.controller'
-import { LoadBalancerService } from './app.service'
+import { ProxyModule } from './proxy/proxy.module'
 
 @Module({
-    controllers: [LoadBalancerController],
-    providers: [LoadBalancerService],
+    imports: [ProxyModule],
 })
 export class AppModule {}
