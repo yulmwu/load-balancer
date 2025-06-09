@@ -4,16 +4,18 @@ export interface BackendServer {
 }
 
 export interface LBConfig {
+    strategy: 'round-robin' | 'random'
     backendServers: BackendServer[]
     healthCheckIntervalMs?: number
 }
 
 export const defaultConfig: LBConfig = {
+    strategy: 'round-robin',
     backendServers: [
         { url: 'http://localhost:3001', healthPath: '/' },
         { url: 'http://localhost:3002', healthPath: '/' },
         { url: 'http://localhost:3003', healthPath: '/' },
     ],
-    healthCheckIntervalMs: 2000,
+    healthCheckIntervalMs: 2000
 }
 

@@ -2,11 +2,12 @@ import { Injectable } from '@nestjs/common'
 import * as httpProxy from 'http-proxy'
 import { Request, Response } from 'express'
 import { HealthCheckService } from './health-check.service'
+import { defaultConfig } from './config'
 
 @Injectable()
 export class ProxyService {
     private proxy = httpProxy.createProxyServer()
-    private index = 0
+    private rrCurrentIndex = 0
 
     constructor(private healthCheck: HealthCheckService) {}
 
@@ -16,12 +17,21 @@ export class ProxyService {
             return res.status(503).send('No healthy backend servers')
         }
 
-        const target = healthyServers[this.index % healthyServers.length]
-        this.index++
+        let target: string
+        if (defaultConfig.strategy === 'random') {
+            const randIndex = Math.floor(Math.random() * healthyServers.length)
+            target = healthyServers[randIndex]
+        } else {
+            target = healthyServers[this.rrCurrentIndex % healthyServers.length]
+            this.rrCurrentIndex++
+        }
 
         this.proxy.web(req, res, { target }, (err) => {
-            console.error('[Proxy Error]', err.message)
-            res.status(502).send('Bad Gateway')
+            res.status(502).send(`Bad Gateway: ${err.message}`)
         })
+    }
+
+    getHealthStatus() {
+        return this.healthCheck.getAllStatus()
     }
 }

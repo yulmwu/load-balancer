@@ -2,7 +2,7 @@ import { Injectable, OnModuleInit } from '@nestjs/common'
 import axios from 'axios'
 import { defaultConfig } from './config'
 
-interface ServerStatus {
+export interface ServerStatus {
     url: string
     healthy: boolean
 }
@@ -21,11 +21,15 @@ export class HealthCheckService implements OnModuleInit {
         return this.status.filter((s) => s.healthy).map((s) => s.url)
     }
 
+    getAllStatus(): ServerStatus[] {
+        return this.status
+    }
+
     private async checkHealthLoop() {
         while (true) {
             for (let i = 0; i < defaultConfig.backendServers.length; i++) {
                 const server = defaultConfig.backendServers[i]
-                const healthPath = server.healthPath || '/'
+                const healthPath = server.healthPath ?? '/'
                 const url = `${server.url}${healthPath}`
 
                 try {
