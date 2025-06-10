@@ -1,3 +1,17 @@
+## For development
+```sh
+docker compose -f docker-compose.dev.yaml up --build
+docker compose -f docker-compose.dev.yaml down
+```
+
+## For production
+```sh
+docker compose -f docker-compose.prod.yaml up --build
+docker compose -f docker-compose.prod.yaml down
+```
+
+---
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
