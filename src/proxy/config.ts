@@ -14,11 +14,10 @@ export interface LBConfig {
 export const defaultConfig: LBConfig = {
     strategy: 'round-robin',
     backendServers: [
-        { url: 'http://localhost:3001', healthPath: '/' },
-        { url: 'http://localhost:3002', healthPath: '/' },
-        { url: 'http://localhost:3003', healthPath: '/' },
+        { url: 'http://host.docker.internal:3001', healthPath: '/' },
+        { url: 'http://host.docker.internal:3002', healthPath: '/' },
+        { url: 'http://host.docker.internal:3003', healthPath: '/' },
     ],
     healthCheckIntervalMs: 2000,
     logging: true,
 }
-

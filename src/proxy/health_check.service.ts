@@ -45,7 +45,8 @@ export class HealthCheckService implements OnModuleInit {
                     } else {
                         if (currentStatus.healthy) currentStatus.failureCount++
                     }
-                } catch {
+                } catch(e) {
+                    console.error(`Health check failed for ${url}:`, e)
                     if (currentStatus.healthy) currentStatus.failureCount++
                 }
 
